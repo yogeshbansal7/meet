@@ -66,7 +66,7 @@ navigator.mediaDevices
     peer.on("call", (call) => {
       console.log('someone call me');
       call.answer(stream);
-      const video = document.createElement("video");
+      const video = document.createElement("video");  
       call.on("stream", (userVideoStream) => {
         addVideoStream(video, userVideoStream);
       });
@@ -165,4 +165,5 @@ socket.on("createMessage", (message, userName) => {
     }</span> </b>
         <span>${message}</span>
     </div>`;
+
 });
