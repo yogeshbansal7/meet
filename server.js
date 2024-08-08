@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const server = require("http").Server(app);
 const { v4: uuidv4 } = require("uuid");
+const http = require('http');
 app.set("view engine", "ejs");
 const io = require("socket.io")(server, {
   cors: {
@@ -24,6 +25,12 @@ app.get("/:room", (req, res) => {
   res.render("room", { roomId: req.params.room });
 });
 
+app.get("/ping", (req, res) => {
+  console.log("Ok");
+  res.send("pong");
+  return;
+});
+
 io.on("connection", (socket) => {
   socket.on("join-room", (roomId, userId, userName) => {
     socket.join(roomId);
@@ -35,6 +42,32 @@ io.on("connection", (socket) => {
     });
   });
 });
+
+function pingServer() {
+  const options = {
+    hostname: 'localhost',
+    port: process.env.PORT || 3030,
+    path: '/ping',
+    method: 'GET'
+  };
+
+  const req = http.request(options, (res) => {
+    res.on('data', (chunk) => {
+      // console.log(`Ping response: ${chunk}`);
+      console.log("Calling dummy api")
+    });
+  });
+
+  req.on('error', (e) => {
+    console.error(`Problem with ping request: ${e}`);
+  });
+
+  req.end();
+}
+
+// Ping the server every 5 minutes
+setInterval(pingServer, 5 * 60 * 1000); // 5 minutes in milliseconds
+
 
 server.listen(process.env.PORT || 3030, () => {
   console.log("Server started");
