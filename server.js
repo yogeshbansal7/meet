@@ -65,8 +65,7 @@ function pingServer() {
   req.end();
 }
 
-// Ping the server every 5 minutes
-setInterval(pingServer, 5 * 60 * 1000); // 5 minutes in milliseconds
+setInterval(pingServer, 8 * 60 * 1000); 
 
 
 server.listen(process.env.PORT || 3030, () => {
